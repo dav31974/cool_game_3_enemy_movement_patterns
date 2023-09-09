@@ -11,24 +11,32 @@ let gameFrame = 1; // variable utilisé pour la frequence de l'animation de l'en
 class Enemy {
     constructor() {
         this.image = new Image();
-        this.image.src = "enemies/enemy2.png";
+        this.image.src = "enemies/enemy4.png";
         this.speed = Math.random() * 2 + 1;
-        this.spriteWidth = 266;
-        this.spriteHeight = 188;
+        this.spriteWidth = 213;
+        this.spriteHeight = 213;
         this.width = this.spriteWidth / 2.5;
         this.height = this.spriteHeight / 2.5;
         this.x = Math.random() * (canvas.width - this.width);
+        this.newX = Math.random() * (canvas.width - this.width);
         this.y = Math.random() * (canvas.height - this.height);
+        this.newY = Math.random() * (canvas.height - this.height);
+        this.flapSpeed = Math.floor(Math.random() * 3 + 1);
         this.frame = 0;  //  tools for animate sprite (position x de l'image source)
-        this.flapSpeed = Math.floor(Math.random() * 8 + 1);  // regler la vitesse en changeant le multiplicateur
-        this.angle = Math.random() * 2;
-        this.angleSpeed = Math.random() * 0.2;
-        this.curve = Math.random() * 7;
+        this.interval = Math.floor(Math.random() * 200 + 50);
+
     }
+    // pour plus de variante - voir 2:05
     update() {
-        this.x -= this.speed;
-        this.y += this.curve * Math.sin(this.angle); // reglage variation d'angle d'altitude via la variable this.curve
-        this.angle += this.angleSpeed;
+        if (gameFrame % this.interval == 0) {
+            this.newX = Math.random() * (canvas.width - this.width);
+            this.newY = Math.random() * (canvas.height - this.height);
+        }
+        let dx = this.x - this.newX;
+        let dy = this.y - this.newY;
+        this.x -= dx / 50;  // modificateur anim
+        this.y -= dy / 50;   // modificateur anim
+
         if (this.x + this.width < 0) this.x = canvas.width;
         // animate sprites (la condition sert à ralentir la frequence de l'animation)
         if (gameFrame % this.flapSpeed === 0) {
